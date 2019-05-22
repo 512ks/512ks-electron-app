@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
 const isDev = require('electron-is-dev');
@@ -68,7 +68,19 @@ autoUpdater.on('download-progress', (progressObj) => {
 })
 autoUpdater.on('update-downloaded', (info) => {
   sendStatusToWindow('Update downloaded');
-  autoUpdater.quitAndInstall();
+  const userChoice = dialog.showMessageBox({
+    type: 'question',
+    title: '版本更新',
+    defaultId: 1,
+    buttons: ['稍后再说', '马上更新'],
+    message: '新版本已下载完毕, 是否退出并更新?'
+  });
+
+  sendStatusToWindow(`userChoice = ${userChoice}`);
+
+  if (userChoice > 0) {
+    autoUpdater.quitAndInstall();
+  }
 });
 
 app.on('ready', function () {
@@ -81,7 +93,6 @@ app.on('ready', function () {
 app.on('window-all-closed', () => {
   app.quit();
 });
-
 
 
 //-------------------------------------------------------------------
