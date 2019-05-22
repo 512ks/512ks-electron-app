@@ -22,13 +22,16 @@ function createDefaultWindow() {
   win = new BrowserWindow({
     title: '512考试教育网',
     show: false,
-    icon: path.resolve(__dirname, 'logo-64.ico'),
+    autoHideMenuBar: true,
+    icon: path.resolve(__dirname, 'build/icon.ico'),
     webPreferences: {
       nodeIntegration: true
     }
   });
   win.maximize();
+  // if (isDev) {
   win.webContents.openDevTools();
+  // }
 
   win.on('ready-to-show', function () {
     win.show();
@@ -39,7 +42,7 @@ function createDefaultWindow() {
     win = null;
   });
 
-  win.loadURL('https://dev.512ks.cn');
+  win.loadURL('http://192.168.20.185:9000');
 
   return win;
 }
@@ -64,6 +67,7 @@ autoUpdater.on('download-progress', (progressObj) => {
 })
 autoUpdater.on('update-downloaded', (info) => {
   sendStatusToWindow('Update downloaded');
+  autoUpdater.quitAndInstall();
 });
 
 app.on('ready', function () {
