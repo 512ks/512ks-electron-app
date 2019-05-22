@@ -3,7 +3,6 @@ const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const url = require('url');
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -14,16 +13,18 @@ let win;
 
 function sendStatusToWindow(text) {
   log.info(text);
-  win.webContents.send('message', text);
+  if (win) {
+    win.webContents.send('message', text);
+  }
 }
 
 
 function createDefaultWindow() {
   win = new BrowserWindow({
     title: '512考试教育网',
+    icon: path.resolve('logo-64.ico'),
     show: false,
     autoHideMenuBar: true,
-    icon: path.resolve(__dirname, 'build/icon.ico'),
     webPreferences: {
       nodeIntegration: true
     }
@@ -61,7 +62,7 @@ autoUpdater.on('error', (err) => {
 })
 autoUpdater.on('download-progress', (progressObj) => {
   let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' - Downloaded ' + progressObj.percent.toFixed(2) + '%';
   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
   sendStatusToWindow(log_message);
 })
@@ -74,10 +75,7 @@ app.on('ready', function () {
   createDefaultWindow();
 
   sendStatusToWindow('App Is Ready');
-  // autoUpdater.checkForUpdatesAndNotify().then(result => {
-  //   sendStatusToWindow(JSON.stringify(result));
-  // });
-  autoUpdater.checkForUpdates();
+  // autoUpdater.checkForUpdates();
 });
 
 app.on('window-all-closed', () => {
