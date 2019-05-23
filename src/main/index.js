@@ -22,7 +22,7 @@ function sendStatusToWindow(text) {
 function createDefaultWindow() {
   win = new BrowserWindow({
     title: '512考试教育网',
-    icon: path.resolve('logo-128.ico'),
+    icon: path.resolve('resources/logo-128.ico'),
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
