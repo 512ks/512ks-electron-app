@@ -1,7 +1,6 @@
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, globalShortcut } = require('electron');
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
-const isDev = require('electron-is-dev');
 const path = require('path');
 
 autoUpdater.logger = log;
@@ -30,9 +29,6 @@ function createDefaultWindow() {
     }
   });
   win.maximize();
-  // if (isDev) {
-  win.webContents.openDevTools();
-  // }
 
   win.on('ready-to-show', function () {
     win.show();
@@ -88,37 +84,13 @@ app.on('ready', function () {
 
   sendStatusToWindow('App Is Ready');
   autoUpdater.checkForUpdates();
+
+  // 注册快捷键打开chrome调试窗口
+  globalShortcut.register('CommandOrControl+F12', () => {
+    win.webContents.openDevTools();
+  });
 });
 
 app.on('window-all-closed', () => {
   app.quit();
 });
-
-
-//-------------------------------------------------------------------
-// Auto updates - Option 2 - More control
-//
-// For details about these events, see the Wiki:
-// https://github.com/electron-userland/electron-builder/wiki/Auto-Update#events
-//
-// The app doesn't need to listen to any events except `update-downloaded`
-//
-// Uncomment any of the below events to listen for them.  Also,
-// look in the previous section to see them being used.
-//-------------------------------------------------------------------
-// app.on('ready', function()  {
-//   autoUpdater.checkForUpdates();
-// });
-// autoUpdater.on('checking-for-update', () => {
-// })
-// autoUpdater.on('update-available', (info) => {
-// })
-// autoUpdater.on('update-not-available', (info) => {
-// })
-// autoUpdater.on('error', (err) => {
-// })
-// autoUpdater.on('download-progress', (progressObj) => {
-// })
-// autoUpdater.on('update-downloaded', (info) => {
-//   autoUpdater.quitAndInstall();  
-// })
