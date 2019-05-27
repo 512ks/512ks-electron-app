@@ -23,6 +23,7 @@ function createDefaultWindow() {
     title: '512考试教育网',
     icon: path.resolve('resources/logo-128.ico'),
     show: false,
+    backgroundColor: '#F8F8F8',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true
