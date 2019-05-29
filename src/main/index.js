@@ -40,7 +40,7 @@ function createDefaultWindow() {
     win = null;
   });
 
-  win.loadURL('https://dev.512ks.cn');
+  win.loadURL('https://www.512ks.cn');
 
   return win;
 }
